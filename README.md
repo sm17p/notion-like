@@ -35,7 +35,7 @@
 - Collaboration - Centralized vs P2P?
 - Note sharing?
     1. De-facto, login auth centralized server
-    2. URL as data store | JavaScript Object -> compression (ProtoBuf or MessagePack) -> query_params - url size limits? (URLS are ASCII, 1 char -> 1 byte)
+    2. URL as data store | JavaScript Object -> compression (ProtoBuf or MessagePack) -> query_params - url size limits? (URL characthers are ASCII encoded, 1 char -> 1 byte)
         - Google Chrome: Around 32,767 characters.   
         - Mozilla Firefox: Around 65,536 characters.   
         - Safari: Around 80,000 characters. Again, while technically supporting long URLs, keeping them concise is best practice.
@@ -46,8 +46,24 @@
 
 
 ### How?
+- Routing
+    1. SPA
+      - Handled by Sveltekit
+    2. Routes
+        1. / - Start Page
+        2. /<note_slug>/ - Editor for doc with it's id determined by `note_slug`
+            1. If `note_slug` is not present redirect to the start page
+        
 - Data
     1. Ropes vs gap buffers vs piece tables vs n-ary trees
+        - Go with N-ary tree, other's help with efficient file edits on a large file size which is out of scope for this project
+    2. Persistence - Local storage vs IndexDB
+        - LocaStorage - Can only store strings, synchronous and blocks main thread.
+            - Chrome/Chromium/Edge: 5 MB per domain
+            - Firefox: 10 MB per domain
+            - Safari: 4-5 MB per domain (varies slightly between versions)
+        - IndexDB + WebWorker + Broadcast Channel, is the ideal choice for a full fledged app. Supports running in web workers, but API is complicated and lacks support for syncing multi tab documents which can be resolved using the Broadcast Channel API. Out of scope for this project.
+        - Sticking to LocalStorage, IndexedDB seems like an over-kill for this version however [RxDB](https://github.com/pubkey/rxdb) seems promising for writing the data persistence layer with it's flexible storage engine model for swapping.
 
 - View
     - Use contententeditable="true" for the work area
@@ -56,9 +72,15 @@
 - Controller
     - Read [Input Event Types](https://w3c.github.io/input-events/#interface-InputEvent-Attributes) spec and scope out support for event types 
     - Read [Clipboard Event](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
+    - Read [Key Handling by browsers](https://unixpapa.com/js/key.html)
+        - Outdated, many of the work-arounds are changed now
+    - Over-riding broswer shotcuts for content-editing
+        - https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/editing/editing_behavior.cc;l=94
 
-- Caveats
-    - 
+- Learnings & Caveats
+    1. Use beforeinput instead of input to override contenteditable
+    2. Handling long-key press (Auto-Repeat)
+    3. Getting the current cursor position on focus
 
 
 # sv
