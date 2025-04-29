@@ -6,6 +6,7 @@
 /// <reference types="svelte/motion" />
 /// <reference types="svelte/store" />
 /// <reference types="svelte/transition" />
+/// <reference types="@thisux/sveltednd" />
 /// <reference types="vite/client" />
 
 import type { BlockNode, LineBreakNode, LineBreakNode, RootNode, TextNode } from "$lib/editor/nodes.svelte";
@@ -108,6 +109,7 @@ declare global {
 			debouncedSyncDB?: () => void;
 			onbeforeinput: EventHandler<InputEvent, HTMLDivElement>;
 			onclick: MouseEventHandler<HTMLDivElement>;
+			ondrop: (state: DragDropState<App.Node>) => Promise<void> | void
 			onkeydown: KeyboardEventHandler<HTMLDivElement>;
 			onkeypress: KeyboardEventHandler<HTMLDivElement>;
 			onkeyup: KeyboardEventHandler<HTMLDivElement>;

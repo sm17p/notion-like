@@ -11,6 +11,9 @@ importers:
       '@inlang/paraglide-js':
         specifier: ^2.0.12
         version: 2.0.12
+      '@thisux/sveltednd':
+        specifier: ^0.0.20
+        version: 0.0.20(svelte@5.28.2)
       radash:
         specifier: ^12.1.0
         version: 12.1.0
@@ -672,6 +675,24 @@ packages:
         optional: true
       vitest:
         optional: true
+
+  '@thisux/sveltednd@0.0.14':
+    resolution: {integrity: sha512-Vbq69SU3HUomPg6oCXtb89OG89hka0YIkdaErYibn3waK7tYE66IcQxD/Fzg8YNW3EVsXoA9kc7kW5EUBCSQGg==}
+
+  '@thisux/sveltednd@0.0.17':
+    resolution: {integrity: sha512-lRninjw439phhA8xAHqCpMAX0hnwFMdbXW4M0XJgAdnGxeum+QsLiIC4P3HnkNXAygsVKUqxRcbS84CxDZ9hPw==}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@thisux/sveltednd@0.0.18':
+    resolution: {integrity: sha512-MO+iR9ZRHApvtwgWujmqwUbhv9mKs0jLOmeG4tn98GmU1/9wVOi02jrNqeggKg3c8dXz6pMmUHfOfmcq7WwYZg==}
+    peerDependencies:
+      svelte: ^5.0.0
+
+  '@thisux/sveltednd@0.0.20':
+    resolution: {integrity: sha512-VE0HopIlHIvNOfSZ1SsiIzl1AmTU0VSd2Nz2Q2nIdqIUsT/UP4hiLw2ed2jFqTKTbqC+kbCYL9vuBpkYnEw+Kw==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   '@types/aria-query@5.0.4':
     resolution: {integrity: sha512-rfT93uj5s0PRL7EzccGMs3brplhcrghnDoV26NqKhCAS1hVo+WdNsPvE/yb6ilfr5hi2MEk6d5EWJTKdxg8jVw==}
@@ -2397,6 +2418,23 @@ snapshots:
     optionalDependencies:
       vite: 6.3.3(jiti@2.4.2)(lightningcss@1.29.2)
       vitest: 3.1.2(jiti@2.4.2)(jsdom@26.1.0)(lightningcss@1.29.2)
+
+  '@thisux/sveltednd@0.0.14': {}
+
+  '@thisux/sveltednd@0.0.17(svelte@5.28.2)':
+    dependencies:
+      '@thisux/sveltednd': 0.0.14
+      svelte: 5.28.2
+
+  '@thisux/sveltednd@0.0.18(svelte@5.28.2)':
+    dependencies:
+      '@thisux/sveltednd': 0.0.17(svelte@5.28.2)
+      svelte: 5.28.2
+
+  '@thisux/sveltednd@0.0.20(svelte@5.28.2)':
+    dependencies:
+      '@thisux/sveltednd': 0.0.18(svelte@5.28.2)
+      svelte: 5.28.2
 
   '@types/aria-query@5.0.4': {}
 

@@ -45,6 +45,7 @@
 	},
 	"dependencies": {
 		"@inlang/paraglide-js": "^2.0.12",
+		"@thisux/sveltednd": "^0.0.20",
 		"radash": "^12.1.0"
 	},
 	"pnpm": {

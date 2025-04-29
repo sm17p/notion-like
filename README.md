@@ -85,15 +85,16 @@
     1. Use beforeinput instead of input to override contenteditable - Browser Coverage 95.76% (IE + Chinese browsers are in the exclude list)
     2. Handling long-key press (Auto-Repeat) - Later, after editing and syncing works.
     3. Getting the current cursor position. On click -> turn on event subscriber for the node.
-    4. As I'm reading through more, the behemoth of complexity behind a simple WYSIWIG editor using the current state of browsers seems a mildly large. I'm guessing it would take me anywhere from 3 - 4 weeks to get a working prototype which behaves consistenly across major browsers. With that in mind, I'll be focusing less on how to package the core functionality as a library, and try to get to a working version compatible with svelte first.
+    4. As I'm reading through more, the behemoth of complexity behind a simple WYSIWIG editor using the current state of browsers seems a bbit astounding. I'm guessing it would take me anywhere from 3 - 4 weeks to get a working prototype which behaves consistenly across major browsers. With that in mind, I'll be focusing less on how to package the core functionality as a library, and try to get to a working version compatible with svelte first.
     5. Adding a whitelist for supported editing actions to further limit the scope
+    6. Don't have enough time, using 3rd party lib for drag n drop
 
 ### Checklist
 - [x] Routing
 - [ ] Editing
 - [x] Syncing
 - [ ] Markdown
-- [ ] Drag 'n' Drop
+- [x] Drag 'n' Drop
 - [ ] Keyboard Shortcuts
 
 

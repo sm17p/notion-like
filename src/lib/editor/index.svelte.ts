@@ -1,7 +1,9 @@
 // place files you want to import through the `$lib` alias in this folder.
 import { debounce } from "radash";
+import type { DragDropState } from '@thisux/sveltednd';
 import { INPUT_TYPE_WHITELIST } from "./commands.svelte";
 import { RootNode } from "./nodes.svelte";
+
 
 
 export class Editor implements App.Editor {
@@ -49,12 +51,24 @@ export class Editor implements App.Editor {
 
 	onbeforeinput = (event: InputEvent) => {
 		const { inputType} = event;
-		// console.log('🚀 ~ onbeforeinput ~ event:', inputType, data);
 		if (INPUT_TYPE_WHITELIST.has(inputType)) {
 			this.selectedNode?.handleEvent(event);
 			this.debouncedSyncDB?.();
 		} else {
+			console.log('🚀 ~ onbeforeinput ~ event ~ blacklist:', inputType);
 			event.preventDefault();
+		}
+	};
+
+	ondrop = (state: DragDropState<App.Node>) => {
+		const { targetContainer, sourceContainer } = state;
+		const dragIndex = parseInt(sourceContainer ?? -1);
+		const dropIndex = parseInt(targetContainer ?? '0');
+		console.log("🚀 ~ Editor ~ dropIndex:", dragIndex, dropIndex);
+		if (dragIndex !== -1 && !isNaN(dropIndex)) {
+			let arr = this.root.children;
+			[arr[dragIndex], arr[dropIndex]] = [arr[dropIndex], arr[dragIndex]];
+			this.debouncedSyncDB?.();
 		}
 	};
 
