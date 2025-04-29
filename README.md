@@ -90,11 +90,11 @@
 
 ### Checklist
 - [x] Routing
-- [] Editing
-- [] Syncing
-- [] Markdown
-- [] Drag 'n' Drop
-- [] Keyboard Shortcuts
+- [ ] Editing
+- [x] Syncing
+- [ ] Markdown
+- [ ] Drag 'n' Drop
+- [ ] Keyboard Shortcuts
 
 
 # sv

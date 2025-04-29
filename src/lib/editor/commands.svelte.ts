@@ -4,6 +4,8 @@ const DATA_EVENTS: any = {
         "insertParagraph",             // insert a paragraph break
         "insertLineBreak",             // insert a line break
         "deleteContentBackward",       // delete the content directly before the caret position and this intention is not covered by another inputType or delete the selection with the selection collapsing to its start after the deletion
+        "deleteSoftLineBackward",      // delete from the caret to the nearest visual line break before the caret position
+        "deleteWordBackward",          // delete a word directly before the caret position
     ],
     BLACKLIST: [
         "deleteByCut",                 // remove the current selection as part of a cut
@@ -13,9 +15,7 @@ const DATA_EVENTS: any = {
         "deleteEntireSoftLine",        // delete from the nearest visual line break before the caret position to the nearest visual line break after the caret position
         "deleteHardLineBackward",      // delete from the caret to the nearest beginning of a block element or br element before the caret position
         "deleteHardLineForward",       // delete from the caret to the nearest end of a block element or br element after the caret position
-        "deleteSoftLineBackward",      // delete from the caret to the nearest visual line break before the caret position
         "deleteSoftLineForward",       // delete from the caret to the nearest visual line break after the caret position
-        "deleteWordBackward",          // delete a word directly before the caret position
         "deleteWordForward",           // delete a word directly after the caret position
         "formatBackColor",             // change the background color
         "formatBold",                  // initiate bold text
@@ -47,9 +47,9 @@ const DATA_EVENTS: any = {
 
 const DATA_TRANSFER_EVENTS = {
     WHITELIST: [
-        "insertFromPaste",             // paste content from clipboard or paste image from client provided image library
     ],
     BLACKLIST: [
+        "insertFromPaste",             // paste content from clipboard or paste image from client provided image library
         "insertFromDrop",              // insert content by means of drop
         "insertTranspose",             // transpose the last two grapheme cluster. that were entered
         "insertFromPasteAsQuotation",  // paste content from the clipboard as a quotation
