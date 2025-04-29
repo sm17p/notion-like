@@ -27,6 +27,7 @@
     2. Paragraphs p
     3. Lists | ol, ul
     4. Divider | hr
+- Markdown style commands
 - Undo / Redo
 
 ### Future support to take into account for architechting present solution
@@ -48,11 +49,11 @@
 ### How?
 - Routing
     1. SPA
-      - Handled by Sveltekit
+      - Handled via Sveltekit
     2. Routes
         1. / - Start Page
         2. /<note_slug>/ - Editor for doc with it's id determined by `note_slug`
-            1. If `note_slug` is not present redirect to the start page
+            - If `note_slug` is not present redirect to the start page
         
 - Data
     1. Ropes vs gap buffers vs piece tables vs n-ary trees
@@ -63,24 +64,37 @@
             - Firefox: 10 MB per domain
             - Safari: 4-5 MB per domain (varies slightly between versions)
         - IndexDB + WebWorker + Broadcast Channel, is the ideal choice for a full fledged app. Supports running in web workers, but API is complicated and lacks support for syncing multi tab documents which can be resolved using the Broadcast Channel API. Out of scope for this project.
-        - Sticking to LocalStorage, IndexedDB seems like an over-kill for this version however [RxDB](https://github.com/pubkey/rxdb) seems promising for writing the data persistence layer with it's flexible storage engine model for swapping.
+        - Sticking with LocalStorage, IndexedDB seems like an over-kill for this version considering the enormous amount of time needed to write the editor core logic. However, [RxDB](https://github.com/pubkey/rxdb) seems promising for writing the data persistence layer with it's flexible storage engine model which we can swap around.
+    3. Creating a DB layer to handle synchronization with `LocalStorage` as a plugin which can be swapped later.
 
 - View
-    - Use contententeditable="true" for the work area
+    - Use contententeditable="true" on the parent for the work area
         - Map data to html elements
 
 - Controller
+    - Event Handler will stream events to the current node being edited. The node will be responsible to perform updates based on it.
     - Read [Input Event Types](https://w3c.github.io/input-events/#interface-InputEvent-Attributes) spec and scope out support for event types 
     - Read [Clipboard Event](https://developer.mozilla.org/en-US/docs/Web/API/ClipboardEvent)
     - Read [Key Handling by browsers](https://unixpapa.com/js/key.html)
         - Outdated, many of the work-arounds are changed now
-    - Over-riding broswer shotcuts for content-editing
+    - Over-riding browser shortcuts for content-editing? -> streamlining editing experiece accross browsers
         - https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/renderer/core/editing/editing_behavior.cc;l=94
 
+
 - Learnings & Caveats
-    1. Use beforeinput instead of input to override contenteditable
-    2. Handling long-key press (Auto-Repeat)
-    3. Getting the current cursor position on focus
+    1. Use beforeinput instead of input to override contenteditable - Browser Coverage 95.76% (IE + Chinese browsers are in the exclude list)
+    2. Handling long-key press (Auto-Repeat) - Later, after editing and syncing works.
+    3. Getting the current cursor position. On click -> turn on event subscriber for the node.
+    4. As I'm reading through more, the behemoth of complexity behind a simple WYSIWIG editor using the current state of browsers seems a mildly large. I'm guessing it would take me anywhere from 3 - 4 weeks to get a working prototype which behaves consistenly across major browsers. With that in mind, I'll be focusing less on how to package the core functionality as a library, and try to get to a working version compatible with svelte first.
+    5. Adding a whitelist for supported editing actions to further limit the scope
+
+### Checklist
+- [x] Routing
+- [] Editing
+- [] Syncing
+- [] Markdown
+- [] Drag 'n' Drop
+- [] Keyboard Shortcuts
 
 
 # sv
