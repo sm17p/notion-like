@@ -24,7 +24,7 @@
       {#each data.notes as note (note.id)}
       <li>
         <a href={`/${note.id}/`}>
-          {note.title}
+          {note.content}
         </a>
       </li>
       {/each}

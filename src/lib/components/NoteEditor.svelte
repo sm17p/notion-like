@@ -1,67 +1,45 @@
-
 <script lang="ts">
-    import './editor.css';
-    import type { ClipboardEventHandler, FocusEventHandler, FormEventHandler, KeyboardEventHandler } from "svelte/elements";
-  
-    const onbeforeinput: FormEventHandler<HTMLDivElement> = (event: Event) => {
-      const { inputType, data } = event as InputEvent;
-      console.log("🚀 ~ onbeforeinput ~ event:", inputType, data, event, window.getSelection());
-      // event.preventDefault();
-    };
-  
-    const onpaste: ClipboardEventHandler<HTMLDivElement> = (event: ClipboardEvent) => {
-      console.log("🚀 ~ onpaste ~ event:", event, event.clipboardData?.getData("text"),);
-    }
-  
-    const onkeypress: KeyboardEventHandler<HTMLDivElement> = (event: KeyboardEvent) => {
-      console.log("🚀 ~ onkeypress ~ event:", event);
-    }
-  
-    const onkeydown: KeyboardEventHandler<HTMLDivElement> = (event: KeyboardEvent) => {
-      console.log("🚀 ~ onkeydown ~ event:", event, event.key);
-    }
-  
-    const onkeyup: KeyboardEventHandler<HTMLDivElement> = (event: KeyboardEvent) => {
-      console.log("🚀 ~ onkeyup ~ event:", event);
-    }
+	import { BlockNode, TextNode } from '$lib/editor/nodes.svelte';
+	import { onMount } from 'svelte';
+	import './editor.css';
+	interface Props {
+		editor: App.Editor;
+	}
 
-    const onclick: FocusEventHandler<HTMLDivElement> = (event: FocusEvent) => {
-      console.log("🚀 ~ onkeyup ~ event:", event, event.target, window.getSelection());
-    }
+	let { editor }: Props = $props();
 
-    interface Props {
-      editor: App.Editor;
-    }
+	function sync() {
+		editor.sync_db();
+	}
+</script>
 
-    let { editor }: Props = $props();
-    // editor.sync_db();
-  </script>
-  
-  
-  <div class="editor border-2 border-amber-300 h-full text-left min-h-60 px-20 py-8" contenteditable="true"
-   {onbeforeinput} 
-   {onpaste}
-   {onkeydown}
-   {onkeypress}
-   {onkeyup}
-   {onclick}
-   role="textbox"
-   tabindex="0"
-   >
+<svelte:document onselectionchange={editor.onselectionchange} />
 
-   <h1 aria-placeholder="Title..."></h1>
-   <hr>
-   {@render Nodes(editor.root.children)}
-  
-  </div>
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_interactive_supports_focus -->
+<div
+	class="editor h-full min-h-60 border-2 border-amber-300 px-20 py-8 text-left select-text"
+	contenteditable="true"
+	onbeforeinput={editor.onbeforeinput}
+	onclick={editor.onclick}
+	onkeydown={editor.onkeydown}
+	onpaste={editor.onpaste}
+	bind:this={editor.rootDomNode}
+	role="textbox"
+>
+	<h1 aria-placeholder="Title..." data-id={editor.id}>{editor.content}</h1>
+	<hr class="editor-divider select-none">
+	{@render Nodes(editor.children)}
+</div>
 
-{#snippet Nodes(nodes: App.Node[])}
-  {#each nodes as node (node.id)}
-    <svelte:element this={node.element} aria-placeholder="Write, '/' for commands">
-      {node.content}
-      {#if node.children?.length > 0}
-        {@render Nodes(node.children)}
-      {/if}
-    </svelte:element>
-  {/each}
+{#snippet Nodes(nodes: App.RootNode['children'] | App.BlockNode['children'])}
+	{#each nodes as node (node.id)}
+	<svelte:element data-id={node.id} this={node.element} aria-placeholder={node instanceof BlockNode ? "Write, '/' for commands..." : undefined}>
+			{#if node instanceof TextNode}
+				{node.content}
+			{:else if node instanceof BlockNode}
+				{@render Nodes(node.children)}
+			{/if}
+		</svelte:element>
+	{/each}
 {/snippet}

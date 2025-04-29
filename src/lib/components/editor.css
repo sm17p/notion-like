@@ -1,5 +1,6 @@
-.editor > [aria-placeholder]::after {
+.editor [aria-placeholder]:empty::after {
     content: attr(aria-placeholder);
     color: var(--color-stone-600);
-    border: 2px solid var(--color-red-300);
+    padding: 4px;
+    cursor: text;
 }
