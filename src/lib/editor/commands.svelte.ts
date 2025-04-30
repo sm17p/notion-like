@@ -4,8 +4,8 @@ const DATA_EVENTS: any = {
         "insertParagraph",             // insert a paragraph break
         "insertLineBreak",             // insert a line break
         "deleteContentBackward",       // delete the content directly before the caret position and this intention is not covered by another inputType or delete the selection with the selection collapsing to its start after the deletion
-        "deleteSoftLineBackward",      // delete from the caret to the nearest visual line break before the caret position
-        "deleteWordBackward",          // delete a word directly before the caret position
+        // "deleteSoftLineBackward",      // delete from the caret to the nearest visual line break before the caret position
+        // "deleteWordBackward",          // delete a word directly before the caret position
     ],
     BLACKLIST: [
         "deleteByCut",                 // remove the current selection as part of a cut

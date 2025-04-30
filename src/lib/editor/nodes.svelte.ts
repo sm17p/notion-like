@@ -1,3 +1,5 @@
+import { editor, selectedBlockNode } from "./store.svelte";
+
 type Node = App.RootNode | App.BlockNode | App.LineBreakNode | App.TextNode;
 
 export class LineBreakNode implements App.LineBreakNode {
@@ -28,9 +30,38 @@ export class TextNode implements App.TextNode {
 		this.content = content;
 	}
 
-	handleEvent() { }
+	handleEvent = (event: InputEvent | MouseEvent | KeyboardEvent): void => {
+		if (event instanceof InputEvent) {
+			this.inputEventHandler(event);
+		} else if (event instanceof MouseEvent) {
+			this.mouseEventHandler(event);
+		} else if (event instanceof KeyboardEvent) {
+			this.keyboardEventHandler(event);
+		} else {
+			console.log("🚀 ~ unhandled ~ event:", event);
+		}
+	}
 
-	inputEventHandler = (event: InputEvent): void => { }
+	inputEventHandler = (event: InputEvent): void => { 
+		const { inputType, data, target, ...rest } = event;
+		const selection = document.getSelection()!;
+		console.log('🚀 ~ TextNode ~ event:', event, inputType, data, document.getSelection(), target, rest, editor.current);
+		let currentIndex = selection.anchorOffset - 1;
+		switch (inputType) {
+			case "insertText":
+				this.content = this.content.slice(0, currentIndex + 1) + data + this.content.slice(currentIndex + 1);
+				break;
+			case "deleteContentBackward":
+				if (currentIndex < 0 || currentIndex > this.content.length) break;
+
+				this.content = this.content.slice(0, currentIndex) + this.content.slice(currentIndex + 1);
+				break;
+			case "insertLineBreak":
+				selectedBlockNode.current?.addLineBreakNode();
+			default:
+		}
+		event.preventDefault();
+	}
 
 	mouseEventHandler = (event: MouseEvent): void => { }
 
@@ -64,15 +95,46 @@ export class BlockNode implements App.BlockNode {
 		});
 	}
 
-	handleEvent() {
-
+	handleEvent = (event: InputEvent | MouseEvent | KeyboardEvent): void => {
+		if (event instanceof InputEvent) {
+			this.inputEventHandler(event);
+		} else if (event instanceof MouseEvent) {
+			this.mouseEventHandler(event);
+		} else if (event instanceof KeyboardEvent) {
+			this.keyboardEventHandler(event);
+		} else {
+			console.log("🚀 ~ unhandled ~ event:", event);
+		}
 	}
 
-	addChild(index?: number) {
-		this.children.push()
+	addChild = (index: number, child: TextNode | LineBreakNode): string => {
+		this.children.splice(index, 0, child);
+		return child.id;
 	};
 
-	inputEventHandler = (event: InputEvent): void => { }
+	addLineBreakNode = (index?: number): string => {
+		let node = new LineBreakNode();
+		return this.addChild(index ?? this.children.length, node);
+	}
+	
+	addTextNode = (index?: number, content?: string) => {
+		let id = crypto.randomUUID()
+		let node = new TextNode(id, 'span', content);
+		return this.addChild(index ?? this.children.length, node);
+	};
+
+	inputEventHandler = (event: InputEvent): void => {
+		const { inputType, data, target, ...rest } = event;
+		const selection = document.getSelection();
+		console.log('🚀 ~ BlockNode ~ event:', inputType, data, document.getSelection(), target, rest);
+
+		if (inputType === "insertText") {
+			if (this.children.length === 0) {
+				this.addTextNode(0, data!);
+			}
+		}
+		event.preventDefault();
+	}
 
 	mouseEventHandler = (event: MouseEvent): void => { }
 
@@ -107,8 +169,11 @@ export class RootNode implements App.RootNode {
 		return this.#id;
 	}
 
-	addChild(index?: number) {
-		this.children.splice(index ?? this.children.length, 0, new BlockNode());
+	addChild = (index?: number): string => {
+		let id = crypto.randomUUID();
+		this.children.splice(index ?? this.children.length, 0, new BlockNode(id));
+		console.log("🚀 ~ RootNode ~ children:", this.children);
+		return id;
 	}
 
 	handleEvent = (event: InputEvent | MouseEvent | KeyboardEvent): void => {
@@ -123,15 +188,19 @@ export class RootNode implements App.RootNode {
 		}
 	}
 
-	findNode = (id: string): Exclude<Node, LineBreakNode> => {
+	findNode = (id: string): Exclude<Node, App.LineBreakNode> => {
 		// BFS to find node
 		const queue: Node[] = [...this.children];
 		const visited: Set<Node> = new Set();
 
+		let found: Node = this;
+
 		while (queue.length > 0) {
 			const currentElement: Node = queue.shift()!; // '!' asserts that the queue is not empty
 
-			if (currentElement.id === id) return currentElement as Exclude<Node, LineBreakNode>;
+			if (currentElement.id === id) {
+				found = currentElement as Exclude<Node, LineBreakNode>
+			};
 
 			if (!visited.has(currentElement)) {
 				visited.add(currentElement);
@@ -145,18 +214,28 @@ export class RootNode implements App.RootNode {
 			}
 		}
 
-		// return root element if not found;
-		return this;
+		return found as Exclude<Node, App.LineBreakNode>;
 	}
 
 	inputEventHandler = (event: InputEvent): void => {
 		const { inputType, data, target, ...rest } = event;
-		const selection = document.getSelection();
-		console.log('🚀 ~ RootNode ~ event:', inputType, data, document.getSelection(), target, rest);
+		const selection = document.getSelection()!;
+		console.log('🚀 ~ RootNode ~ event:', event, inputType, data, document.getSelection(), target, rest);
+		let currentIndex = selection.anchorOffset - 1;
+		let childId: string;
+
 		switch (inputType) {
 			case "insertText":
-				this.content += data;
-				selection?.setPosition(selection.focusNode, selection.focusOffset);
+				this.content = this.content.slice(0, currentIndex + 1) + data + this.content.slice(currentIndex + 1);
+				break;
+			case "deleteContentBackward":
+				if (currentIndex < 0 || currentIndex > this.content.length) break;
+				this.content = this.content.slice(0, currentIndex) + this.content.slice(currentIndex + 1);
+				break;
+			case "insertParagraph":
+			case "insertLineBreak":
+				childId = this.addChild(0);
+				// selection?.setPosition(selection.focusNode, selection.focusOffset);
 			default:
 		}
 		event.preventDefault();

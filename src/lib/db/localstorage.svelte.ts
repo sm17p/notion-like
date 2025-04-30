@@ -44,7 +44,6 @@ export class LocalStorage implements App.DB {
     }
 
 	setUserNote(note: App.Editor) {
-		console.log("🚀 ~ LocalStorage ~ setUserNote ~ note:", note.root.content, JSON.stringify(note.root));
 		localStorage.setItem(note.id, JSON.stringify(note.root))
 	}
 

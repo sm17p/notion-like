@@ -77,7 +77,7 @@ declare global {
 			inputEventHandler: (event: InputEvent) => void;
 			mouseEventHandler: (event: MouseEvent) => void;
 			keyboardEventHandler: (event: KeyboardEvent) => void;
-			addChild: (index?: number) => void;
+			addChild: (index?: number) => string;
 			changeNodeType?: () => void; 
 			toJSON:() => void;
 		}
@@ -91,6 +91,9 @@ declare global {
 		}
 
 		interface BlockNode extends Omit<Node, 'element'>, BlockNodeSerDe {
+			addChild: (index: number, child: TextNode | LineBreakNode) => string;
+			addLineBreakNode: (index?: number) => string;
+			addTextNode: (index?: number, content?: string) => string;
 			children: (TextNode | LineBreakNode)[];
 			toJSON: () => BlockNodeSerDe;
 		}
@@ -103,8 +106,10 @@ declare global {
 
 		interface Editor extends Pick<RootNode, "id" | "content" | "children"> {
 			// version: number;
-			root: RootNode;
+			root: App.RootNode;
 			rootDomNode: HTMLDivElement;
+			selectedNode?: App.RootNode | App.BlockNode | App.TextNode;
+			inputType?: string;
 			sync_db: () => void;
 			debouncedSyncDB?: () => void;
 			onbeforeinput: EventHandler<InputEvent, HTMLDivElement>;

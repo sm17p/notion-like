@@ -4,3 +4,35 @@
     padding: 4px;
     cursor: text;
 }
+
+/* Dev styles: start */
+.editor *:hover::before {
+    content: attr(data-id);
+    position: absolute;
+    font-size: 12px;
+    top: 0px;
+    width: 300px;
+    padding: 2px;
+    transform: translateY(calc(clamp(-2rem, -2rem + 0.25rem * var(--tree-depth) ,-1rem))) translateX(calc(0.5rem * var(--tree-depth)));
+    z-index: 10;
+    background-color: oklch(0.45 0.31 calc(264 + 36 * var(--tree-depth)));
+}
+
+.editor * {
+    position: relative;
+    --tree-depth: 0;
+}
+
+.editor > * {
+    padding: 12px 0;
+    --tree-depth: 0;
+}
+
+.editor > * > * {
+    --tree-depth: 1;
+}
+
+.editor > * > * > * {
+    --tree-depth: 2;
+}
+/* Dev styles: end */

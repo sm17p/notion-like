@@ -88,13 +88,22 @@
     4. As I'm reading through more, the behemoth of complexity behind a simple WYSIWIG editor using the current state of browsers seems a bbit astounding. I'm guessing it would take me anywhere from 3 - 4 weeks to get a working prototype which behaves consistenly across major browsers. With that in mind, I'll be focusing less on how to package the core functionality as a library, and try to get to a working version compatible with svelte first.
     5. Adding a whitelist for supported editing actions to further limit the scope
     6. Don't have enough time, using 3rd party lib for drag n drop
+    7. Dev css styles - manual in `editor.css`
+    8. Event bubbling model within root node should work better? For some input types children need to access method handlers from the parent or grand parents.
 
 ### Checklist
 - [x] Routing
 - [ ] Editing
+    - [ ] inputText
+    - [ ] inputParagraph
+    - [ ] deleteContentBackward
+    - [ ] Keyboard Navigation
+        - [ ] Left & Right
+        - [ ] Up & Down
+- [ ] '/' Commands, change node type
 - [x] Syncing
+- [ ] Drag 'n' Drop
 - [ ] Markdown
-- [x] Drag 'n' Drop
 - [ ] Keyboard Shortcuts
 
 
