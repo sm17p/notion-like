@@ -13,6 +13,66 @@
 
 ## Design Doc
 
+### TL;DR
+
+Run `pnpm dev` to open up the editor
+
+```md
+src/
+├── lib
+│   ├── components         
+│   │  ├── NoteEditor.svelte     // Editor View
+│   ├── db         
+│   │  ├── index.svelte.ts       // Editor Model
+│   ├── editor
+│   │  ├── commands.svelte.ts    // Editor Blacklist and Whitelist events
+│   │  ├── events.svelte.ts      // Editor Events handler -> future use
+│   │  ├── nodes.svelte.ts       // Editor Node definitions
+│   │  ├── index.svelte.ts       // Editor Controller
+│   │  ├── store.svelte.ts       // Editor state sharing b/w nodes -> Hack till event handler is designed
+│   ├── utils
+│   │  ├── index.ts              // Editor Node Traversal Utils
+├── routes
+│   ├── [note_slug]
+│   │  ├── +page.svelte    // Note Route
+│   ├── +page.svelte       // Home Route
+```
+
+#### Current Design
+1. 4 Types of Nodes `RootNode`, `BlockNode`, `TextNode` and `LineBreakNode`
+2. Editor attaches event listeners to a DOM Node(eg: Look inside NoteEditor.svelte) (Had to manually connect, didn't have time to figure out automatic binding using svelte)
+3. Editor maintains a pointer to `RootNode` which is a n-ary tree representation just like a DOM
+4. Editor figures out the current selected node and forwards events to that node.
+5. Each node is responsible to handle an event according to it's current state and forward events to other nodes if required
+6. Update node state
+7. Svelte reactivity kicks in and handles updates to the viewport
+
+#### What works?
+1. Start Page
+2. `TextNode` is created
+3. `inputParagraph` on Note title will create a new `BlockNode` but cursor won't align
+4. Input/Delete buggy will move cursor to node start
+5. Syncing with localstorage
+6. Check issues tab for demo
+
+### Checklist
+- [x] Routing
+- [ ] Editing
+    - [ ] inputText
+    - [ ] inputParagraph
+    - [ ] deleteContentBackward
+    - [ ] Keyboard Navigation
+        - [ ] Left & Right
+        - [ ] Up & Down
+- [ ] '/' Commands, change node type
+- [x] Syncing
+- [ ] Drag 'n' Drop
+- [ ] Markdown
+- [ ] Keyboard Shortcuts
+
+
+
+
 ### Features & Support
 - Start page
     1. New
@@ -43,7 +103,6 @@
         - Microsoft Edge: Similar to Chrome, around 32,767 characters. This is likely due to the shared Chromium engine.   
         - Google Android: Around 8,192 characters. 
 - Spell Check, language tools web extensions? (Too far)
-
 
 
 ### How?
@@ -90,22 +149,6 @@
     6. Don't have enough time, using 3rd party lib for drag n drop
     7. Dev css styles - manual in `editor.css`
     8. Event bubbling model within root node should work better? For some input types children need to access method handlers from the parent or grand parents.
-
-### Checklist
-- [x] Routing
-- [ ] Editing
-    - [ ] inputText
-    - [ ] inputParagraph
-    - [ ] deleteContentBackward
-    - [ ] Keyboard Navigation
-        - [ ] Left & Right
-        - [ ] Up & Down
-- [ ] '/' Commands, change node type
-- [x] Syncing
-- [ ] Drag 'n' Drop
-- [ ] Markdown
-- [ ] Keyboard Shortcuts
-
 
 # sv
 
