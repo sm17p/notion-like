@@ -6,7 +6,7 @@ export class LineBreakNode implements App.LineBreakNode {
 	id: string;
 	element: App.LineBreakNode["element"];
 
-	constructor(id: string = crypto.randomUUID(), element: App.TextNode['element'] = 'br') {
+	constructor(id: string = crypto.randomUUID(), element: App.LineBreakNode['element'] = 'br') {
 		this.id = id;
 		this.element = element;
 	}

@@ -30,7 +30,7 @@ export class Editor implements App.Editor {
 	}
 
 	sync_db = () => {
-		console.log("🚀 ~ Editor ~ sync_db ~ sync_db:")
+		console.log("🚀 ~ Editor ~ sync_db ~ sync_db:");
 		this.#db.setUserNote(this);
 	}
 

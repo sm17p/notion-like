@@ -57,7 +57,7 @@ declare global {
 		}
 
 		interface TextNodeSerDe extends BaseNodeSerDe {
-			element: TextElement;
+			element: TextElements;
 			content: string;
 		}
 
@@ -67,7 +67,7 @@ declare global {
 		}
 
 		interface RootNodeSerDe extends BaseNodeSerDe {
-			element: HeadingElement
+			element: RootHeadingElement
 			content: string;
 			children: BlockNodeSerDe[]
 		}

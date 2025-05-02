@@ -18,14 +18,14 @@
 </script>
 
 <svelte:document onselectionchange={editor.onselectionchange} />
-{#if __DEV__}
+<!-- {#if __DEV__} -->
 	<div class="fixed top-0 right-0 text-right grid text-sm px-2 bg-amber-100 text-black">
-		<span>Selected Node</span>
+		<span>Debug Info: Selected Node</span>
 		<span>{editor.selectedNode?.id ?? 'N.A.'}</span>
 		<span>{editor.selectedNode?.element}</span>
 		<span>{editor.inputType}</span>
 	</div>
-{/if}
+<!-- {/if} -->
 
 <!-- Current layout blocks editing -->
 <!-- use:draggable={{ container: index.toString(), dragData: node, disabled: !isBlockNode  }}
